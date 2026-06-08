@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
 import { toast } from 'react-toastify';
 import LoginIllustration from '../components/LoginIllustration'
+import BASE_URL from '../config/api';
 
-const api = `http://localhost:5000/api/auth/login`
+// const api = `http://localhost:5000/api/auth/login`
+const api = `${BASE_URL}/api/auth/login`;
 
 const Login = () => {
   const [user, setUser] = useState({

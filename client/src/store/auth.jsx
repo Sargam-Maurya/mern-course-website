@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { createContext } from 'react'
+import BASE_URL from '../config/api';
 
 export const AuthContext = createContext() //👉 “I’m creating a global store”
 
@@ -19,9 +20,9 @@ export const AuthProvider = ({children}) => {
 
     //tackling the logout function
     const LogoutUser = () => {
-        setToken("")
-        return localStorage.removeItem("token")
-        setUser(null)
+        setToken("");
+    setUser(null);
+    localStorage.removeItem("token");
     }  //logout-3
 
 
@@ -29,7 +30,7 @@ export const AuthProvider = ({children}) => {
 
     const useAuthentication = async () => {
         try{
-            const response = await fetch("http://localhost:5000/api/auth/user", {
+            const response = await fetch("fetch(`${BASE_URL}/api/auth/user`", {
                 method: 'GET',
                 headers: {
                     Authorization:`Bearer ${token}`,
@@ -50,7 +51,7 @@ export const AuthProvider = ({children}) => {
     // to fetch services data from backend and make it available globally
     const getServices = async () => {
         try{
-            const response = await fetch("http://localhost:5000/api/data/service", {
+            const response = await fetch("fetch(`${BASE_URL}/api/data/service`", {
                 method: 'GET'
             })
             if(response.ok){

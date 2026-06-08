@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../store/auth'
 import ContactIllustration from '../components/ContactIllustration'
 import { toast } from 'react-toastify';
+import BASE_URL from '../config/api';
 
     const defaultContactForm = {
       username: '',
       email: '',
       message:''
     }
-    const api = 'http://localhost:5000/api/form/contact'
+    // const api = 'http://localhost:5000/api/form/contact'
+    const api = `${BASE_URL}/api/form/contact`;
 
   const Contact = () => {
     const [contact, setContact] = useState(defaultContactForm)

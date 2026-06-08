@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/auth'
 import { toast } from 'react-toastify';
 import RegisterIllustration from '../components/RegisterIllustration'
+import BASE_URL from '../config/api';
 
-const api = `http://localhost:5000/api/auth/register`
+// const api = `http://localhost:5000/api/auth/register`
+const api = `${BASE_URL}/api/auth/register`;
 const Register = () => {
 
   const [user, setUser] = useState({
