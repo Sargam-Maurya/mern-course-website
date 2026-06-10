@@ -1,80 +1,91 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom' //used for update the user
 import { useAuth } from '../store/auth'
-import ContactIllustration from '../components/ContactIllustration'
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'
 
-    const defaultContactForm = {
-      username: '',
-      email: '',
-      message:''
+const AdminUpdate = () => {
+    
+    const [data, setData] = useState({
+        username: '',
+        email:'',
+        phone: '',
+    })
+
+    const {authorizationToken, API} = useAuth()
+
+    const params = useParams() //used for update the user
+    //update the user on delete button 
+    const getSingleUserData = async () => {
+      try{
+        const response = await fetch(`${API}/api/admin/users/${params.id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization : authorizationToken,
+                    "Content-Type": "application/json"
+                },
+            })
+
+            const data = await response.json()
+            console.log(`users single data  ${data}`)
+            setData(data)
+            // if(response.ok){
+            //   getAllUsersData()
+            // }
+      }
+      catch(error){
+        console.log(error)
+      }
     }
-   
 
-  const Contact = () => {
-    const [contact, setContact] = useState(defaultContactForm)
-    const [userData, setUserData] = useState(true) //Auto-Fill Contact Fields ke liye naya usestate banaya hai 
+    useEffect(() => {
+        getSingleUserData()
+    }, [])
+    
 
-    const {user, API} = useAuth()
-     // const api = 'http://localhost:5000/api/form/contact'
-    const URL = `${API}/api/form/contact`
-
-    if(userData && user) {
-      setContact({
-        username: user.username,
-        email: user.email,
-        message: '',
-      })
-      setUserData(false) //Auto-Fill Contact Fields ke 
-    }
-
-    //handling the form input
     const handleInput = (e) => {
-      console.log(e)
-      let name = e.target.name;
-      let value = e.target.value;
-      setContact({
-        ...contact,
-        [name] : value,
-      })
+        let name = e.target.name
+        let value = e.target.value
+        setData({
+            ...data,
+            [name] : value,
+        })
     }
-  
-    //handling the form submit
+
+    // to update the data dynamically 
     const handleSubmit = async (e) => {
       e.preventDefault()
 
       try{
-        const response = await fetch(URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(contact)
+        const response = await fetch(`${API}/api/admin/users/update/${params.id}`, {
+            method: 'PATCH',
+                headers: {
+                    Authorization : authorizationToken,
+                    "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
         })
-        const res_data = await response.json()
-        console.log("response from server", res_data.extraDetails)
-
         if(response.ok){
-        setContact(defaultContactForm)
-        toast.success("Contact form submitted successfully")
+            toast.success("Update successfully")
         }else{
-          toast.error(res_data.extraDetails ? res_data.extraDetails : res_data.message)
+            toast.error("not updated")
         }
       }
       catch(error){
-        console.log("contact", error)
+        console.log(error)
       }
     } 
+
   return (
     <div>
-      <section>
+        <section>
          <main>
            <div>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                 <div className='registration-image p-5 md:p-10'>
+                 {/* <div className='registration-image p-5 md:p-10'>
                     <ContactIllustration className='w-full h-auto'/>
-                 </div>
+                 </div> */}
                  <div className='registration-form p-5 md:p-10'>
-                   <h1 className='main-heading mb-3 text-white text-2xl md:text-4xl'>Contact Form</h1>
+                   <h1 className='main-heading mb-3 text-white text-2xl md:text-4xl'>Update User Data</h1>
                   <br/>
                   <form onSubmit={handleSubmit}>
                     <div className='text-white mb-5'>
@@ -91,7 +102,7 @@ import { toast } from 'react-toastify';
                        id='username'
                        required
                        autoComplete='off'
-                       value={contact.username}
+                       value={data.username}
                        onChange={handleInput}
                        />
                     </div>
@@ -109,28 +120,28 @@ import { toast } from 'react-toastify';
                        id='email'
                        required
                        autoComplete='off'
-                       value={contact.email}
+                       value={data.email}
                        onChange={handleInput}
                        />
                     </div>
                     <div className='text-white mb-5'>
-                       <label htmlFor="message" className="text-neutral-300 text-sm font-medium tracking-wide">Message</label>
+                       <label htmlFor="phone" className="text-neutral-300 text-sm font-medium tracking-wide">Phone</label>
                        <input 
                        className="mt-2 w-full px-3 py-2 bg-neutral-800 border border-neutral-700/60 rounded-md text-white 
                        placeholder-neutral-500 outline-none
                       transition-all duration-200 focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500"
                        type="text" 
-                       name='message'
-                       placeholder='Enter your message'
-                       id='message'
+                       name='phone'
+                       placeholder='Enter your phone number'
+                       id='phone'
                        required
                        autoComplete='off'
-                       value={contact.message}
+                       value={data.phone}
                        onChange={handleInput}
                        />
                     </div>
                     <button type='submit' className='bg-violet-600 text-white font-medium py-2.5 rounded w-full active:scale-80 transition duration-300'>
-                        Submit
+                        Update
                     </button>
                   </form>
                 </div>
@@ -139,19 +150,8 @@ import { toast } from 'react-toastify';
           
          </main>
       </section>
-      <section >
-        <div>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.4847317060135!2d72.8864024749902!3d19.086379482120375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c887efb78b9f%3A0x9f9dc99c3119470a!2sPhoenix%20Marketcity!5e0!3m2!1sen!2sin!4v1780126158428!5m2!1sen!2sin"
-            width="100%"
-            height="450"
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </section>
     </div>
   )
 }
-export default Contact
+
+export default AdminUpdate
