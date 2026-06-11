@@ -14,7 +14,7 @@ const HeroSection = () => {
       <div className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl ${isLight ? 'bg-violet-200/40' : 'bg-violet-800/10'}`}></div>
       <main className="relative max-w-7xl mx-auto px-5 md:px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[85vh]">
-          <div className="pt-20 md:pt-0">
+          <div className="pt-10 md:pt-0">
             <div className={`inline-flex items-center gap-2 border rounded-full px-4 py-1.5 text-sm mb-6 ${isLight ? 'bg-violet-100 border-violet-200 text-violet-700' : 'bg-violet-600/10 border-violet-600/20 text-violet-400'}`}>
               <span className={`w-2 h-2 rounded-full animate-pulse ${isLight ? 'bg-violet-500' : 'bg-violet-500'}`}></span>
               Trusted by 10,000+ students
@@ -51,7 +51,7 @@ const HeroSection = () => {
               <p className="text-sm"><span className={`font-semibold ${isLight ? 'text-gray-900' : 'text-white'}`}>4.9</span> avg rating</p>
             </div>
           </div>
-          <div className="hidden md:flex justify-center items-center">
+          <div className="flex justify-center items-center">
             <div className="relative w-full max-w-md">
               <div className="absolute inset-0 bg-gradient-to-t from-violet-600/20 to-transparent rounded-2xl"></div>
               <LearningIllustration className="relative w-full h-auto drop-shadow-2xl" />
